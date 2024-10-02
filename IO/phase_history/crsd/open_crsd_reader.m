@@ -19,7 +19,7 @@ file_header=read_crsd_file_header(fid);
 fseek(fid,file_header.XML_BLOCK_BYTE_OFFSET,'bof'); % Should be here already, but just to be sure
 xml_string = fread(fid,file_header.XML_BLOCK_SIZE,'*char')';
 fseek(fid,2,'cof'); % Pass over \f\n section terminator
-xml_meta = sicdxml2struct(xmlread(java.io.StringBufferInputStream(xml_string)));
+xml_meta = sicdxml2struct(read_xml(xml_string));
 
 % This might make it work in some old CPHD tools:
 % xml_meta.Data.ArraySize = xml_meta.Data.Channel;

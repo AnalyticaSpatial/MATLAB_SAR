@@ -358,21 +358,21 @@ if isfield(output_meta,'SCPCOA')&&all(isfield(output_meta.SCPCOA,{'ARPPos','ARPV
         % output_meta.SCPCOA.TwistAng = asind(cross(ETP, spn) * (-uLOS) / norm(cross((-uLOS), ETP)));
     end
     if ~isfield(output_meta.SCPCOA,'SlopeAng')
-        output_meta.SCPCOA.SlopeAng = acosd(ETP * spn.'); % Angle between slant and ground planes
+        output_meta.SCPCOA.SlopeAng = acosd(ETP .* spn.'); % Angle between slant and ground planes
     end
     north_ground = [ 0; 0; 1 ] - (ETP * [ 0; 0; 1 ]) * ETP.'; % Project north onto ground plane
     uNORTH = north_ground/norm(north_ground); % Unit vector in ground plane in north direction
     uEAST = cross(uNORTH, ETP); % Unit vector in ground plane in east direction
     if ~isfield(output_meta.SCPCOA,'AzimAng')
-        az_north = uGPX.' * uNORTH; % Component of ground-projected range vector in north direction
-        az_east = uGPX.' * uEAST.'; % Component of ground-projected range vector in east direction
+        az_north = uGPX.' .* uNORTH; % Component of ground-projected range vector in north direction
+        az_east = uGPX.' .* uEAST.'; % Component of ground-projected range vector in east direction
         output_meta.SCPCOA.AzimAng = atan2( az_east, az_north);
         output_meta.SCPCOA.AzimAng = mod(output_meta.SCPCOA.AzimAng*180/pi, 360); % Assure in [0,360], not [-pi,pi]
     end
     if ~isfield(output_meta.SCPCOA,'LayoverAng')
-        layover_ground = (ETP - (1 / (ETP * spn.')) * spn).'; % Layover direction in ground plane
-        lo_north = layover_ground.' * uNORTH; % Component of layover in north direction
-        lo_east = layover_ground.' * uEAST.'; % Component of layover in east direction
+        layover_ground = (ETP - (1 ./ (ETP .* spn.')) .* spn).'; % Layover direction in ground plane
+        lo_north = layover_ground.' .* uNORTH; % Component of layover in north direction
+        lo_east = layover_ground.' .* uEAST.'; % Component of layover in east direction
         output_meta.SCPCOA.LayoverAng = atan2( lo_east, lo_north);
         output_meta.SCPCOA.LayoverAng = mod(output_meta.SCPCOA.LayoverAng*180/pi, 360); % Assure in [0,360], not [-pi,pi]
     end

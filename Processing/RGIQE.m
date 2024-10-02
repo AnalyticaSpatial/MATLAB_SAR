@@ -156,7 +156,7 @@ try
 catch
     try
         fid = fopen(fullfilename);
-        meta = {sicdxml2struct(xmlread( java.io.StringBufferInputStream( char(fread(fid)'))))};
+        meta = {read_xml( char(fread(fid)'))};
         fclose(fid);
     catch
         error('RGIQE:InvalidFile','Invalid File.');

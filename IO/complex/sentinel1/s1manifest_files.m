@@ -12,7 +12,7 @@ function [ files ] = s1manifest_files( domnode )
 % Overall wrapping node is in a namespace that makes things messier
 % (than they already are) in a XPath call, so we go down one level.
 domnode = domnode.getFirstChild;
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+xp = xpath();
 
 %% Find associated measurement and metadata files in this package
 % First find all of the "Measurement Data Units".  This should provide each

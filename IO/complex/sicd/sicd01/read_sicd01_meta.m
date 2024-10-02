@@ -31,7 +31,7 @@ meta.header_length_in_bytes=ftell(fid);
 fread(fid,2,'uchar'); % Blank line (/12/10) in between header and xml
 % Read XML
 SICD_xml_string = fread(fid,meta.header.xml_content_length,'uchar=>char',0)';
-meta.xmldata = xml2simplestruct( xmlread( java.io.StringBufferInputStream( SICD_xml_string ) ) );
+meta.xmldata = xml2simplestruct(read_xml(SICD_xml_string));
 fclose(fid);
 
 end

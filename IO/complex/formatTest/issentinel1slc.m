@@ -12,8 +12,8 @@ if iscell(filename)
     boolout = issentinel1slc(filename{1}); % Check validity of SAFE file
     % Check for validity of orbit file here
     if boolout && mightbexml(filename{2})
-        xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
-        domnode = xmlread(filename{2});
+        xp = xpath();
+        domnode = read_xml(filename{2});
         try
             % The local-name XPath construct is used to avoid dealing with
             % fields that use namespaces.
@@ -31,8 +31,8 @@ end
 
 % Or just a SAFE file
 if mightbexml(filename)
-    xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
-    domnode = xmlread(filename);
+    xp = xpath();
+    domnode = read_xml(filename);
     % Overall wrapping node is in a namespace that makes things messier
     % (than they already are) in a XPath call, so we go down one level.
     domnode = domnode.getFirstChild;

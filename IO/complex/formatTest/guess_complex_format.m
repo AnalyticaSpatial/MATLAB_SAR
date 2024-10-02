@@ -12,7 +12,7 @@ function format_string = guess_complex_format(filename)
 % //////////////////////////////////////////
 
 % Get list of all file format test functions
-path=fileparts(which(mfilename('fullpath'))); % Path for this mfile
+path=fileparts(mfilename('fullpath')); % Path for this mfile
 filelist=dir([path filesep 'is*.m']); % All test functions are named with this convention
 test_formats = regexprep(sort({filelist.name}),'\.m$',''); % Remove extensions from filenames
 

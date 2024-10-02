@@ -71,7 +71,7 @@ if strcmp(nitfVer ,'2.1')
         nitfHdr.(numDEs).SFH_L2 = str2double(fread(fid,7,'uint8=>char')');
     elseif strcmp(nitfHdr.(numDEs).DESID,'SICD_XML')
         SICD_xml_string = fread(fid,nitfHdr.filehdr.LD(str2double(numDEs(10:end))),'uint8=>char')';
-        nitfHdr.(numDEs).DESDATA = sicdxml2struct( xmlread( java.io.StringBufferInputStream( SICD_xml_string ) ) );
+        nitfHdr.(numDEs).DESDATA = sicdxml2struct(read_xml(SICD_xml_string));
     else % Skip unrecognized DES types
         nitfHdr.(numDEs).DESUSH_OFFSET = ftell(fid); % Record offset, so we can parse user subheaders later
         fseek(fid, nitfHdr.(numDEs).DESSHL, 'cof');

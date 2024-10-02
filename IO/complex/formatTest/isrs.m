@@ -8,16 +8,16 @@ function boolout = isrs( filename )
 % //////////////////////////////////////////
 
 if mightbexml(filename)
-    xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+    xp = xpath();
     try
         satellite=xp.evaluate(['/*[local-name()=''product'']'...
             '/*[local-name()=''sourceAttributes'']'...
-            '/*[local-name()=''satellite'']'],xmlread(filename));
+            '/*[local-name()=''satellite'']'],read_xml(filename));
         % OK, now a long explanation for a single line of code.  The above
         % XPath expression is less efficient (and much more clumsy to
         % write) than the following which worked in MATLAB 2009b and below:
         % boolout=strcmpi('RADARSAT-2',...
-        %     xp.evaluate('product/sourceAttributes/satellite',xmlread(filename)));
+        %     xp.evaluate('product/sourceAttributes/satellite',read_xml(filename)));
         % However, XPath with no namespace resolver merely queries for an
         % element that is not associated with any namespace.  Since RS2 XML
         % files have a default namespace, every element is associated with

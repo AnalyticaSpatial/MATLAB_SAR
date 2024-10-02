@@ -8,7 +8,7 @@ function [ output_meta ] = meta2sicd_s1cal( domnode )
 % //////////////////////////////////////////
 
 % Setup
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+xp = xpath();
 
 num_cal_vecs=str2double(xp.evaluate(...
     'count(calibration/calibrationVectorList/calibrationVector)',domnode));

@@ -3,6 +3,8 @@ The MATLAB SAR Toolbox is a basic MATLAB library to read, write, display, and do
 
 Some sample SICD files are available [here](https://github.com/ngageoint/six-library/wiki/Sample-SICDs), although since the MATLAB SAR Toolbox can make its own SICDs or read other formats with an API that makes them look as if they were SICD, one doesn't really need an actual SICD file to use this toolbox and benefit from the SICD metadata standard.
 
+Octave support is provided but has limited testing, see the installation notes in README.octave.md
+
 A sampling of some of the functionality available in the toolbox is provided below.
 
 ### File I/O

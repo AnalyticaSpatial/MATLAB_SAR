@@ -26,7 +26,7 @@ fid = fopen(filename);
 fseek(fid,SICD_DES_Offset,'bof');
 SICD_xml_string = fread(fid,SICD_DES_Length,'uint8=>char')';
 fclose(fid);
-SICD_meta = sicdxml2struct( xmlread( java.io.StringBufferInputStream( SICD_xml_string ) ) );
+SICD_meta = sicdxml2struct(read_xml(SICD_xml_string));
 
 %% Adjust frequencies in metadata to be true, not offset values, if
 % reference frequency is available

@@ -18,7 +18,7 @@ function [ output_meta ] = meta2sicd_rs_xml( xml_domnode, beta_domnode, noise_do
 
 %% Setup
 SECONDS_IN_A_DAY = 24*60*60;
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+xp = xpath();
 
 %% CollectionInfo
 output_meta.CollectionInfo.CollectorName=char(xp.evaluate(...

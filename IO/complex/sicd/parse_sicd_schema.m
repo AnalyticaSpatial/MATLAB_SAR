@@ -11,7 +11,7 @@ function [ schema_struct ] = parse_sicd_schema( filename )
 % //////////////////////////////////////////
 
 % Open file
-schema_root = xmlread(filename);
+schema_root = read_xml(filename);
 schema_root = schema_root.getDocumentElement;
 schema_struct.ns = char(schema_root.getAttribute('xmlns'));
 

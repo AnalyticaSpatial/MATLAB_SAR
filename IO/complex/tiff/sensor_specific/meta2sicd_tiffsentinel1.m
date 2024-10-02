@@ -14,7 +14,7 @@ s1xmlfile=dir(fullfile(fileparts(pathname),'manifest.safe')); % Sentinel 1 file
 if (length(s1xmlfile)==1)&&issentinel1slc(fullfile(fileparts(pathname),s1xmlfile.name))
     % Process manifest.safe file
     manifest_path = fileparts(pathname);
-    manifest_domnode=xmlread(fullfile(manifest_path,'manifest.safe'));
+    manifest_domnode=read_xml(fullfile(manifest_path,'manifest.safe'));
     meta_manifest=meta2sicd_s1manifest(manifest_domnode);
     % Which measurement file in the manifest did we open?
     files = s1manifest_files(manifest_domnode);
@@ -22,7 +22,7 @@ if (length(s1xmlfile)==1)&&issentinel1slc(fullfile(fileparts(pathname),s1xmlfile
     if ~isempty(files(index).product) && ...
             exist(fullfile(manifest_path, files(index).product),'file')
         % Find associated xml metadata file
-        product_domnode=xmlread(fullfile(manifest_path, files(index).product));
+        product_domnode=read_xml(fullfile(manifest_path, files(index).product));
         meta_product = meta2sicd_s1product(product_domnode);
         for j = 1:numel(meta_product)
             % Handle dual-polarization case.  Label channel number appropriate

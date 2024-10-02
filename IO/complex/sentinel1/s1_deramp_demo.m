@@ -11,14 +11,14 @@ function s1_deramp_demo( manifest_safe_filename )
 % //////////////////////////////////////////
 
 %% Constants
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+xp = xpath();
 SECONDS_IN_A_DAY = 24*60*60;
 SYMMETRY=[0 0 1];
 SP = 1; % Swath and polarization
 BURST = 1; % Which burst in swath and polarization SP do we want to examine?
 
 %% Open files
-manifest_domnode = xmlread(manifest_safe_filename);
+manifest_domnode = read_xml(manifest_safe_filename);
 files = s1manifest_files(manifest_domnode);
 readerobj=cell(1,numel(files));
 for i=1:numel(files) % File for each swath and polarization
@@ -27,7 +27,7 @@ for i=1:numel(files) % File for each swath and polarization
     if i==SP
         readerobj = open_ctiff_reader_noxml(fullfile(basepathname,datafilename),SYMMETRY);
     end
-    domnode{i} = xmlread(fullfile(fileparts(manifest_safe_filename), files(i).product));
+    domnode{i} = read_xml(fullfile(fileparts(manifest_safe_filename), files(i).product));
     if ~strcmpi(char(xp.evaluate('product/adsHeader/mode',domnode{i})),'IW')
         error('S1_DERAMP_DEMO:NOT_IW_MODE','This function only works for Sentinel 1 IW mode data.');
     end
@@ -36,7 +36,7 @@ for i=1:numel(files) % File for each swath and polarization
 end
 % Allow for testing with the sample XML data in ESA document
 % SP = 1;
-% domnode{SP}=xmlread(manifest_safe_filename);
+% domnode{SP}=read_xml(manifest_safe_filename);
 % [start_s, start_frac] = datenum_w_frac(char(xp.evaluate(...
 %     'product/swathTiming/burstList/burst[1]/azimuthTime',domnode{SP})));
 

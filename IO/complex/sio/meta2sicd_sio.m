@@ -20,7 +20,7 @@ end
 % small 'stub' SICD metadata structure (not much information in the SIO
 % header).
 if (isfield(user_data,'SICDMETA'))
-  output_meta = sicdxml2struct( xmlread( java.io.StringBufferInputStream(user_data.SICDMETA) ) );
+  output_meta = sicdxml2struct( read_xml( user_data.SICDMETA ) );
 else
   output_meta.ImageData.NumRows=sio_hdr(2);
   output_meta.ImageData.NumCols=sio_hdr(3);

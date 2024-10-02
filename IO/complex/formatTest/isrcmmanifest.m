@@ -9,8 +9,8 @@ function boolout = isrcmmanifest( filename )
 
 % Check for valid SAFE file
 if mightbexml(filename)
-    xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
-    domnode = xmlread(filename);
+    xp = xpath();
+    domnode = read_xml(filename);
     % Overall wrapping node is in a namespace that makes things messier
     % (than they already are) in a XPath call, so we go down one level.
     domnode = domnode.getFirstChild;

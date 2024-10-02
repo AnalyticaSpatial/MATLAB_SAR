@@ -14,7 +14,9 @@ symmetry=[0 0 0];
 % RS2/RCM TIFF doesn't have much metadata in the TIFF itself, but it should
 % have a co-located product.xml file
 [pathname, fileonly, ext] = fileparts(tiff_filename);
-jFile=java.io.File(tiff_filename);
+
+jFile = java_file(tiff_filename);
+
 tiff_filename = char(jFile.getCanonicalPath);
 if strcmp(gen, 'RS2')
     productxmlfile = fullfile(pathname,'product.xml'); % Main metadata file
@@ -23,8 +25,8 @@ elseif strcmp(gen, 'RCM')
 end
 files_found = dir(productxmlfile);
 if length(files_found)==1
-    xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
-    rsxml_meta=xmlread(productxmlfile);
+    xp = xpath();
+    rsxml_meta=read_xml(productxmlfile);
     meta=meta2sicd_rs_xml(rsxml_meta);
     
     % XML describes all images of a polarimetric collection
@@ -45,7 +47,7 @@ if length(files_found)==1
                                        '/*[local-name()=''ipdf'']'],...
                                       rsxml_meta)); % Check name of one image
         end
-        jFile=java.io.File(fullfile(fileparts(productxmlfile), current_file_pol));
+        jFile = java_file(fullfile(fileparts(productxmlfile), current_file_pol));
         current_file_pol = char(jFile.getCanonicalPath);  % RCM IDPF are given as relative paths
         if strcmp(tiff_filename,current_file_pol) % Does it match this TIFF?
             meta=meta{i}; % If so, use the pole value from this image

@@ -15,7 +15,7 @@ symmetry=[0 0 0]; % Sentinel-1 is only right-looking, so this should be true for
 % TIFF reader returns data transposed from MATLAB's (because that's the
 % order of the data in the file and how it should be read.)
 symmetry(3) = ~symmetry(3);
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+xp = xpath();
 
 %% Allow for SAFE and EOF files to be passed in cell array
 if iscell(filename)
@@ -24,7 +24,7 @@ if iscell(filename)
 end
 
 %% Read and process XML metadata
-manifest_domnode = xmlread(filename);
+manifest_domnode = read_xml(filename);
 files = s1manifest_files(manifest_domnode);
 meta_manifest = meta2sicd_s1manifest(manifest_domnode);
 
@@ -39,17 +39,17 @@ for i=1:numel(files) % There will be a file for each swath and polarization
     meta_tiff = read_tiff_tags(fullfile(basepathname,datafilename));
     if ~isempty(files(i).product) && ...
             exist(fullfile(basepathname, files(i).product),'file')
-        product_domnode = xmlread(fullfile(basepathname, files(i).product));
+        product_domnode = read_xml(fullfile(basepathname, files(i).product));
         % meta2sicd_s1product will return an array of metadata structures if there are multiple bursts
         if exist('eof_filename','var')
-            eof_domnode = xmlread(eof_filename);
+            eof_domnode = read_xml(eof_filename);
             meta_product = meta2sicd_s1product(product_domnode, eof_domnode);
         else
             meta_product = meta2sicd_s1product(product_domnode);
         end
         if ~isempty(files(i).calibration) && ...
                 exist(fullfile(basepathname, files(i).calibration),'file')
-            meta_cal = meta2sicd_s1cal(xmlread(fullfile(basepathname, files(i).calibration)));
+            meta_cal = meta2sicd_s1cal(read_xml(fullfile(basepathname, files(i).calibration)));
             if isfield(meta_cal,'Radiometric')
                 for j = 1:numel(meta_product)
                     meta_product{j}.Radiometric = meta_cal.Radiometric;
@@ -61,7 +61,7 @@ for i=1:numel(files) % There will be a file for each swath and polarization
         end
         if ~isempty(files(i).noise) && ...
                 exist(fullfile(basepathname, files(i).noise),'file')
-            meta_noise = meta2sicd_s1noise(xmlread(fullfile(...
+            meta_noise = meta2sicd_s1noise(read_xml(fullfile(...
                 basepathname, files(i).noise)), meta_product);
             for j = 1:numel(meta_product)
                 if iscell(meta_noise) && ...

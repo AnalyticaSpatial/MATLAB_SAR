@@ -8,12 +8,12 @@ function [ readerobj ] = open_tsx_reader( filename )
 % //////////////////////////////////////////
 
 %% Read in XML metadata
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
-domnode=xmlread(filename); % Read main TSX XML descriptor file
+xp = xpath();
+domnode=read_xml(filename); % Read main TSX XML descriptor file
 filepath=fileparts(filename);
 geoxmlfile=dir(fullfile(filepath,'ANNOTATION','GEOREF.xml'));
 if ~isempty(geoxmlfile)
-    geo_dom_node = xmlread(fullfile(filepath,'ANNOTATION','GEOREF.xml'));
+    geo_dom_node = read_xml(fullfile(filepath,'ANNOTATION','GEOREF.xml'));
 else
     geo_dom_node = [];
 end

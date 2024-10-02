@@ -15,7 +15,7 @@ function [ output_meta ] = meta2sicd_s1manifest( domnode )
 % Overall wrapping node is in a namespace that makes things messier
 % (than they already are) in a XPath call, so we go down one level.
 domnode = domnode.getFirstChild;
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+xp = xpath();
 
 %% CollectionInfo
 platform_xp_str = ['metadataSection/' ...

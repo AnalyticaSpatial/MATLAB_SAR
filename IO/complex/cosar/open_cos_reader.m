@@ -19,16 +19,16 @@ if strcmp(pathname,'IMAGEDATA')
     xmlfile=dir(fullfile(parentpath,'*.xml'));
     geoxmlfile=dir(fullfile(parentpath,'ANNOTATION','GEOREF.xml'));
     if (length(xmlfile)==1)&&istsx(fullfile(parentpath,xmlfile.name))
-        tsxxml_meta=xmlread(fullfile(parentpath,xmlfile.name));
+        tsxxml_meta=read_xml(fullfile(parentpath,xmlfile.name));
         if ~isempty(geoxmlfile)
-            tsxgeoxml_meta = xmlread(fullfile(parentpath,'ANNOTATION','GEOREF.xml'));
+            tsxgeoxml_meta = read_xml(fullfile(parentpath,'ANNOTATION','GEOREF.xml'));
         else
             tsxgeoxml_meta = [];
         end
         meta=meta2sicd_tsxxml(tsxxml_meta, tsxgeoxml_meta);
         % XML describes all images of a polarimetric collection
         % Select metadata associated with only this COSAR file
-        xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+        xp = xpath();
         layerIndex=...
             str2double(xp.evaluate(...
             ['level1Product/productComponents/imageData[file/location/filename="' fileonly ext '"]/@layerIndex'],...

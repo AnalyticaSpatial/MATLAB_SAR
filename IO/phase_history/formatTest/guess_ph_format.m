@@ -18,8 +18,7 @@ function format_string = guess_ph_format( filename )
 % //////////////////////////////////////////
 % /// CLASSIFICATION: UNCLASSIFIED       ///
 % //////////////////////////////////////////
-
-fullname=which(mfilename('fullpath'));
+fullname=mfilename('fullpath');
 path=fileparts(fullname);
 filelist=dir([path filesep 'is*.m']);
 

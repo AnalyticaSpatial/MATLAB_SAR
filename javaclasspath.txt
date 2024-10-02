@@ -1,0 +1,5 @@
+./xml/xerces-2_12_2/serializer.jar
+./xml/xerces-2_12_2/xercesImpl.jar
+./xml/xerces-2_12_2/resolver.jar
+./xml/xerces-2_12_2/xercesSamples.jar
+./xml/xerces-2_12_2/xml-apis.jar

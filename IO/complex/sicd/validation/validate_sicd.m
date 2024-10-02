@@ -39,20 +39,18 @@ fseek(fid,NITF_meta.minimal.desOffsets(1),'bof');
 SICD_xml_string = fread(fid,NITF_meta.minimal.desLengths(1),'uint8=>char')';
 fclose(fid);
 % Convert metadata into MATLAB structure
-SICD_meta = sicdxml2struct( xmlread( java.io.StringBufferInputStream( SICD_xml_string ) ) );
+SICD_meta = sicdxml2struct(read_xml(SICD_xml_string));
 
 %% 1. Most fundamental check.  First validate XML schema
 % SICD XML should validate with one (and only one) schema.  If it does, we
 % will report which schema it validated against.  If it does not, we will
 % report the first validation error against each schema.
 % Now perform validation
-factory = javax.xml.validation.SchemaFactory.newInstance('http://www.w3.org/2001/XMLSchema');
 xsd_path = fileparts(which(mfilename('fullpath')));
 filelist = dir(fullfile(xsd_path, 'SICD_schema*.xsd'));
 for i = 1:numel(filelist) % Try with all known XSDs
-    schema = factory.newSchema( java.io.File(fullfile(xsd_path, filelist(i).name)) );
     try
-        schema.newValidator().validate( javax.xml.transform.stream.StreamSource( java.io.StringBufferInputStream( SICD_xml_string ) ) );
+        validate_xml(SICD_xml_string, fullfile(xsd_path, filelist(i).name));
         disp(['XML passed validation for ' filelist(i).name '.']);
         validation_report = cell(0,3); % Clear any error messages from earlier schemas not validating
         if i ~= numel(filelist) % Validation is not against most recent SICD version

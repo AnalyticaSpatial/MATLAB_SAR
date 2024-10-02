@@ -13,7 +13,7 @@ function [ output_meta ] = meta2sicd_s1product( domnode, eof_domnode )
 
 %% Setup
 SECONDS_IN_A_DAY = 24*60*60;
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+xp = xpath();
 
 %% CollectionInfo
 common_meta.CollectionInfo.CollectorName = char(xp.evaluate(...
@@ -814,7 +814,7 @@ times_sec = times_sec(valid);
 times_frac = times_frac(valid);
 
 % XPath version.  Goes MUCH slower!  Don't use.
-% xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+% xp=xpath();
 % base_xpath = 'Earth_Explorer_File/Data_Block/List_of_OSVs/OSV';
 % num_grid_points=str2double(xp.evaluate(['count(' base_xpath ')'],dom_node));
 % for i = 1:num_grid_points

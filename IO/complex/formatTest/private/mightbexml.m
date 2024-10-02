@@ -16,7 +16,7 @@ fclose(fid);
 booleanout=current_char=='<'; % XML file must start with '<' symbol
 if booleanout % The first test is extremely quick and filters out most non-XML files
     try % This test is slower, but verifies XML format
-        xmlread(filename); % Invalid XML will cause error
+        read_xml(filename); % Invalid XML will cause error
     catch % An error will be caught but will still produce red text in command window.  Annoying...
         booleanout=false;
     end

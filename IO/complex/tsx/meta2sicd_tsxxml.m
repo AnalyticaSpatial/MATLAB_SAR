@@ -18,7 +18,7 @@ SECONDS_IN_A_DAY = 24*60*60;
 if ~exist('geo_xml','var')
     geo_xml = '';
 end
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+xp = xpath();
 
 %% CollectionInfo
 output_meta.CollectionInfo.CollectorName=char(xp.evaluate(...
@@ -543,7 +543,7 @@ function [DopCentroidPoly, TimeCOAPoly] = ...
 
 SECONDS_IN_A_DAY = 24*60*60;
 
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+xp = xpath();
 
 % Read input parameters from metadata
 N=str2double(xp.evaluate(...

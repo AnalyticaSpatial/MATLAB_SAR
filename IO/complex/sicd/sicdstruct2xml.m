@@ -23,8 +23,6 @@ p1.addParamValue('file_type','SICD',@(x) any(strcmp(x,{'SICD','CPHD','CRSD'})));
 p1.parse(varargin{:});
 
 % Create XML
-doc = com.mathworks.xml.XMLUtils.createDocument(p1.Results.file_type);
-root_node = doc.getDocumentElement;
 if isfield(sicdmeta,'schema') && isfield(sicdmeta.schema, 'filename') % Undocumented feature to enable writing old versions
     schema_filename = which(sicdmeta.schema.filename);
 else
@@ -45,50 +43,29 @@ if ~isempty(schema_filename)
 else
     schema_info = struct('ns',[],'types',[],'master',[]);
 end
-if ~isempty(schema_info.ns)
-    root_node.setAttribute('xmlns',schema_info.ns);
-end
-sicdstruct2xml_recurse(root_node, sicdmeta, schema_info.master);
-xmlstr = xmlwrite(root_node);
-% Remove XML declaration which xmlwrite adds unavoidably:
-% <?xml version="1.0" encoding="utf-8"?>
-start_index = regexp(xmlstr,'(?<=^<\?xml.+?\?>[\s]*)<');
-% Regular expression explanation:
-% (?<=    Start of lookbehind
-% ^       Start of line (All XML declarations must start first position of first line.)
-% <\?xml  Start of XML declaration must be '<?xml'
-% .+?     Lazy match for anything with XML declaration
-% \?>     End of XML declaration must be '?>'
-% [\s]*   Ignore whitepaces immediately after XML declaration
-% )       End of lookbehind
-% <       We want the beginning of the XML after the XML declaration
-if ~isempty(start_index)
-    xmlstr = xmlstr(start_index(1):end);
-end
-% The Saxon XML processor that MATLAB's xmlwrite uses automatically adds
-% newlines and tabs.
-if ~p1.Results.inc_newline
-    xmlstr = regexprep(xmlstr,'[\n][\s]*',''); % Remove newlines and whitespace if requested
-end
 
+doc = create_xml_doc(p1.Results.file_type, schema_info.ns);
+root_node = doc.getDocumentElement;
+
+sicdstruct2xml_recurse(root_node, sicdmeta, schema_info.master);
+xmlstr = write_xml(root_node);
+ 
 % Validate XML string against schema
 if ~isempty(schema_filename)
-    factory = javax.xml.validation.SchemaFactory.newInstance('http://www.w3.org/2001/XMLSchema');
-    schema = factory.newSchema( java.io.File(schema_filename) );
     try
-       schema.newValidator().validate( javax.xml.transform.stream.StreamSource( java.io.StringBufferInputStream( xmlstr ) ) );
+       validate_xml(xmlstr, schema_filename);
     catch ME
        % XML string failed validation
-       % Find the useful part of the error message.
-       [first, last] = regexp(ME.message, '(?<=org.xml.sax.SAXParseException[:;] ).+?(?=[\r\n])');
-       if ~isempty(first)
+       % Check this is a SAX parser exception in a way that works for Octave and Matlab
+       if ~isempty(strfind(ME.message, 'SAXParseException'))
+           temp_str = regexp(ME.message,'.a:','split','once');
            warning('SICDSTRUCT2XML:SCHEMA_VALIDATION_FAILURE', ...
                ['XML metadata failed to validate against schema.  ' ...
                'This is not unusual.  It just means that the metadata used for ' ...
                'this dataset doesn''t exactly match the ' p1.Results.file_type ...
                ' schema being used in the writer.  In this case, ' ...
-               'the (first) reason is:\n' ME.message(first:last)]);
-       else % Not the error we expected
+               'the reason is:\n' temp_str{end}]);
+       else
            rethrow(ME);
        end
     end
@@ -293,7 +270,7 @@ end
                         str = datestr(sicdmeta,...
                             'yyyy-mm-ddTHH:MM:SS.FFFZ');
                         class_str = 'xs:dateTime';
-                    elseif isdatetime(sicdmeta)
+                    elseif ~is_octave() && isdatetime(sicdmeta) % isdatetime not supported in Octave
                         str = [datestr(sicdmeta, 'yyyy-mm-ddTHH:MM') ...
                             ':' char(regexp(num2str(sicdmeta.Second, '%012.9f'), ...
                             ... % Trim trailing zeros except one immediately after decimal

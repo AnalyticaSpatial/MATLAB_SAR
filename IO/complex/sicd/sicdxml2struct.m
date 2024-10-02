@@ -170,7 +170,9 @@ end
                                     % Convert to MATLAB serial date number
                                     temp_str=in_string;
                                     temp_str(isletter(in_string))=' ';
-                                    current_struct=datenum(temp_str,31);
+                                    % remove trailing fractions of seconds, this is seen with UMBRA data creation timestamps
+                                    temp_str = strsplit(temp_str, '.');
+                                    current_struct=datenum(temp_str{1},31);
                                 case 'xs:boolean'
                                     current_struct=eval(lower(in_string)); % 'true' or 'false'
                                 otherwise

@@ -8,8 +8,8 @@ function [ readerobj ] = open_rs_reader( filename )
 % //////////////////////////////////////////
 
 %% Read and process XML metadata
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
-domnode=xmlread(filename);
+xp = xpath();
+domnode=read_xml(filename);
 symmetry=[0 0 0];
 % Because RS2/RCM XML uses a default namespace, we have to use a local-name
 % query, rather than the much simpler traditional XPath query that assumes
@@ -60,13 +60,13 @@ sampleOrder=char(xp.evaluate(['/*[local-name()=''product'']'...
 symmetry(1)=xor(strcmp(lineOrder,'Decreasing'),lookdir(1)=='L');
 symmetry(2)=strcmp(sampleOrder,'Decreasing');
 if exist(beta_lut_str, 'file')
-    betanode={xmlread(beta_lut_str)};
+    betanode={read_xml(beta_lut_str)};
 else
     betanode = {};
 end
 if exist(noise_str, 'file')
     try % Simulated RCM datasets have misformed noise XML
-        betanode = {betanode{:} xmlread(noise_str)};
+        betanode = {betanode{:} read_xml(noise_str)};
     end
 end
 meta=meta2sicd_rs_xml(domnode,betanode{:});

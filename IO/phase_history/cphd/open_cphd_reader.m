@@ -29,7 +29,8 @@ end
 fseek(fid,file_header.XML_BLOCK_BYTE_OFFSET,'bof'); % Should be here already, but just to be sure
 xml_string = fread(fid,file_header.XML_BLOCK_SIZE,'*char')';
 fseek(fid,2,'cof'); % Pass over \f\n section terminator
-xml_meta = sicdxml2struct(xmlread(java.io.StringBufferInputStream(xml_string)));
+
+xml_meta = sicdxml2struct(read_xml(xml_string));
 
 if isfield(xml_meta.Data,'SignalCompressionID')
     error('OPEN_CPHD_READER:COMPRESSED_DATA','Compressed data not handled.');
@@ -173,7 +174,6 @@ readerobj.get_meta = @() xml_meta;
         else
             wbvectors = [];
         end
-
         % Copy selected vector-based data to a structure
         if nargout>1
             fldnames = fieldnames(vbp_all);

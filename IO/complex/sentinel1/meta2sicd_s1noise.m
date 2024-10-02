@@ -8,7 +8,7 @@ function [ output_meta ] = meta2sicd_s1noise( domnode, meta_product )
 % //////////////////////////////////////////
 
 % Setup
-xp=javax.xml.xpath.XPathFactory.newInstance.newXPath();
+xp = xpath();
 
 % Compute the first line of each burst in overall TIFF file
 first_line = zeros(numel(meta_product),1);
